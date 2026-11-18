@@ -1,33 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:myportfolio_mobile/screens/project_form.dart';
+import 'package:myportfolio_mobile/widgets/left_drawer.dart';
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage({super.key});
+  const MyHomePage({super.key});
 
-  final String npm = "2506610286";
-  final String nama = "Faaiz";
-  final String kelas = "PBP A";
+  final String npm = '2506610286';
+  final String nama = 'Faaiz';
+  final String kelas = 'PBP A';
 
-  final List<ItemHomepage> items = [
-    ItemHomepage("Lihat Proyek", Icons.folder, Colors.blue),
-    ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.green),
-    ItemHomepage("Logout", Icons.logout, Colors.red),
-    ItemHomepage("Lihat Experience", Icons.folder, Colors.yellow),
-    ItemHomepage("Tambah Experience", Icons.add_circle, Colors.purple),
+  final List<ItemHomepage> items = const [
+    ItemHomepage('Lihat Proyek', Icons.folder, Colors.blue),
+    ItemHomepage('Tambah Proyek', Icons.add_circle, Colors.green),
+    ItemHomepage('Logout', Icons.logout, Colors.red),
+    ItemHomepage('Lihat Experience', Icons.folder, Colors.yellow),
+    ItemHomepage('Tambah Experience', Icons.add_circle, Colors.purple),
   ];
 
   @override
   Widget build(BuildContext context) {
     // Scaffold menyediakan struktur visual dasar halaman (AppBar, Body, SnackBar).
     return Scaffold(
-      // AppBar menampilkan bar bagian atas halaman aplikasi.
       appBar: AppBar(
         title: const Text(
           'MyPortfolio',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       // Body halaman utama dengan padding di sekelilingnya.
+      drawer: const LeftDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -117,7 +120,7 @@ class ItemHomepage {
   final IconData icon;
   final Color color;
 
-  ItemHomepage(this.name, this.icon, this.color);
+  const ItemHomepage(this.name, this.icon, this.color);
 }
 
 class ItemCard extends StatelessWidget {
@@ -132,17 +135,24 @@ class ItemCard extends StatelessWidget {
       color: item.color,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
-        // Aksi ketika kartu ditekan oleh pengguna.
         onTap: () {
-          // Menampilkan SnackBar dengan pesan interaktif.
+          if (item.name == 'Tambah Proyek') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProjectFormPage()),
+            );
+            return;
+          }
+
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                content: Text("Kamu telah menekan tombol ${item.name}!"),
+                content: Text('Kamu telah menekan tombol ${item.name}!'),
               ),
             );
         },
+
         child: Container(
           padding: const EdgeInsets.all(8),
           child: Center(
